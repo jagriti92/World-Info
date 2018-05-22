@@ -1,0 +1,89 @@
+<div class="cards">
+    <div class="card bg-dark text-white">
+        <img class="card-img" src="{{img}}" alt="Card image">
+        <div class="card-img-overlay">
+            <h5 class="card-title">{{value}}</h5>
+            <h6><a href="" [routerLink]="['/home']">Home</a></h6>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col col-3">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Country: </span>
+                </div>
+                <input type="text" class="form-control" placeholder="Enter Country" aria-label="Username" aria-describedby="basic-addon1" [(ngModel)]="term" [ngModelOptions]="{standalone: true}">
+            </div>
+        </div>
+        <div class="col col-3">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Capital: </span>
+                </div>
+                <input type="text" class="form-control" placeholder="Enter Capital" aria-label="Username" aria-describedby="basic-addon1" [(ngModel)]="caps" [ngModelOptions]="{standalone: true}">
+            </div>
+        </div>
+        <div class="col col-3">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">SubRegion: </span>
+                </div>
+                <input type="text" class="form-control" placeholder="Enter Subregion" aria-label="Username" aria-describedby="basic-addon1" [(ngModel)]="reg" [ngModelOptions]="{standalone: true}">
+            </div>
+        </div>
+
+        <div class="col-col-3">
+            <select [(ngModel)]="view" class="custom-select">
+          <option value="ascending" [selected]>Ascending</option>
+          <option value="descending">Descending</option>
+        </select>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="card lowercard" style="width: 18rem;" *ngFor="let data of Countries| countryFilter : term|capitalFilter : caps|regionFilter : reg |sort:view |paginate: { itemsPerPage: 9, currentPage: p }; let i = index">
+            <img class="card-img-top" src={{data.flag}} alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">{{ data.name }}</h5>
+                <hr>
+                <ul class="list-unstyled">
+                    <li *ngIf="data.capital"><span style="margin-right: 45px;">Capital :</span>{{data.capital}}</li>
+                    <li><span style="margin-right: 23px;">TimeZone :</span>{{data.timezones[0]}}</li>
+                    <li>
+                        <div class="row">
+                            <div class="col-5"><span style="padding-right: 10px;">Currency :</span></div>
+                            <div class="col-7">
+                                <span *ngFor="let currency of data.currencies; let last = last">
+                              <a [routerLink]="['/allCountry','currency',currency.code]">
+                              {{currency.name}}{{last ? "":',&nbsp;'}}
+                              </a>
+                          </span>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="row">
+                            <div class="col-5"><span style="padding-right: 10px;">Languages :</span></div>
+                            <div class="col-7"><span><a href="" *ngFor = "let lang of data.languages; let last = last" [routerLink] = "['/allCountry','lang',lang.iso639_1]">{{lang.name}}{{last ? "":',&nbsp;'}}</a></span></div>
+                        </div>
+
+                    </li>
+                    <li><span style="margin-right: 13px;">Subregions :</span>{{data.subregion}}</li>
+                </ul>
+                <hr>
+                <a href="#" class="btn btn-primary" [routerLink]="['/name',data.name]">More Details</a>
+            </div>
+        </div>
+    </div>
+    <br><br>
+    <span class="paginate">
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+      </span>
+    <br><br>
+    <a href="#" class="btn btn-primary back" [routerLink]="['/home']">Home</a>
+    <br><br><br><br><br>
+</div>
